@@ -1,7 +1,8 @@
+/* Author Neo */
+
 
 /// menuitems with initial datas
 /// treating array like Database
-
 let menuItems = [
   { 
     id: 1,
@@ -206,6 +207,7 @@ const showItemsToEdit = (id) => {
 
         if(!item){
             console.warn(`Item with id ${id} is not found!`)
+            showErrorMessage(`Item with id ${id} is not found!`)
             return;
         }
 
@@ -224,6 +226,7 @@ const handleDeleteItem = (id) => {
 
         if(!item){
             console.warn(`Item with id ${id} is not found!`)
+            showErrorMessage(`Item with id ${id} is not found!`)
             return;
         }
         
@@ -350,6 +353,7 @@ const renderOrders = () => {
     }
 
     orderTableBody.innerHTML = orders.map(order => {
+
         const itemNames = order.items.map(item => `${item.name} x ${item.quantity}`).join(",")
 
         const statusClass = order.status === "Pending" ? "pending" : "done"
@@ -503,20 +507,21 @@ const createOrder = (itemId, quantity) => {
 
     const item = findItem(itemId)
     if(!item){
-        alert("Please select a valid menu item.");
+        showErrorMessage("Please select a valid menu item.")
         return false;
     }
 
-    if(quantity < 1){
-        alert("Please select a valid menu item.");
+    if(quantity < 1 || !Number.isInteger(quantity)){
+        showErrorMessage("Please select a valid menu item.")
         return false;
     }
 
     if(item.stock < quantity){
-        alert(`Only ${item.stock} units of ${item.name} are available.`);
+        showErrorMessage(`Only ${item.stock} units of ${item.name} are available.`)
         return false;
     }
 
+    item.stock -= quantity; /// this means, after we create new order with available stock, we need to decrease stock amount in menuitems
     const newOrder = {
             id: nextOrderId++,
             items: [{itemId: item.id , name: item.name, price : item.price, quantity: quantity}],
@@ -543,9 +548,11 @@ const createOrder = (itemId, quantity) => {
 
 
 let toastTimer;
-const showSuccessMessage = (message) => {
+
+const showMessage = (message, type) => {
     const toast = document.querySelector("#toast")
     const toastMsg = document.querySelector("#toastMessage")
+    const toastIcon = document.querySelector(".toast-icon")
 
     if(!toast || !toastMsg){
         return;
@@ -553,6 +560,11 @@ const showSuccessMessage = (message) => {
 
     // set message here
     toastMsg.textContent = message
+
+    toast.style.backgroundColor = type === "success" ? "#16a34a" : "#dc2626";
+    toastIcon.style.display = "none"
+    toast.style.borderColor = "#dc2626"
+    toast.style.color = "#fff"
 
     // some styling in css
     toast.classList.add("show")
@@ -564,6 +576,14 @@ const showSuccessMessage = (message) => {
     setTimeout(() => {
         toast.classList.remove("show")
     }, 3000)
+}
+
+const showSuccessMessage = (message) => {
+    showMessage(message, "success")
+}
+
+const showErrorMessage = (message) => {
+    showMessage(message, "error")
 }
 
 const settingForm = document.querySelector(".view .settings-form")
