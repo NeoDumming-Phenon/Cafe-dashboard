@@ -10,7 +10,7 @@ let menuItems = [
     category: "Coffee", 
     price: 75, 
     stock: 12, 
-    image : "imgs/latte.jpg"
+    image : "imgs/hotcoffee.jpg"
   },
   {
      id: 2, 
@@ -201,7 +201,7 @@ grid.addEventListener("click", (event) => {
 
 /// when user click edit btn, this action will show live item datas check before editing them
 const showItemsToEdit = (id) => {
-        editItemId = id;
+       
 
         const item = findItem(id);
 
@@ -211,6 +211,7 @@ const showItemsToEdit = (id) => {
             return;
         }
 
+         editItemId = id;
         document.querySelector("#fName").value = item.name;
         document.querySelector("#fPrice").value = item.price;
         document.querySelector("#fCat").value = item.category;
@@ -271,8 +272,7 @@ itemForm.addEventListener("submit", (event) => {
 
     saveItems()
 
-    itemForm.reset();
-    document.querySelector("#addTitle").textContent = "Add item";
+    resetItemForm();
     location.hash = "v-menu";
 });
 
@@ -285,11 +285,11 @@ const saveItems = () => {
 
     if(editItemId != null){
         editItem(name,price,category,stock)
+        editItemId = null
     }
     else{
         addItem(name,price,category,stock)
     }
-
 }
 
 const editItem = (name,price,category,stock) => {
@@ -302,7 +302,6 @@ const editItem = (name,price,category,stock) => {
             item.category = category;
             item.stock = stock;
         }
-
         renderMenus()
         renderOrderOptions() /// this method should be called here again because whenever we edit an item in menu, we need to update that item in order option
         showSuccessMessage(`${item.name} is edited successfully!`)
@@ -334,6 +333,7 @@ const addItem = (name,price,category,stock) => {
             stock: stock,
             image: images[category]
         }
+
         menuItems.push(newItem);
         console.log(menuItems); // all menus after adding one
 
@@ -342,6 +342,26 @@ const addItem = (name,price,category,stock) => {
         showSuccessMessage(`${name} is added successfully!`)
 }
 
+const addItemBtn = document.querySelector("#addItemBtn");
+
+addItemBtn.addEventListener("click", () => {
+    resetItemForm();
+});
+
+
+const cancelItemBtn = document.querySelector("#cancelBtn");
+
+cancelItemBtn.addEventListener("click", () => {
+    resetItemForm();
+});
+
+const resetItemForm = () => {
+    editItemId = null;
+
+    itemForm.reset();
+
+    document.querySelector("#addTitle").textContent = "Add item";
+}
 
 /// redern method for all order data
 const renderOrders = () => {
@@ -549,7 +569,7 @@ const createOrder = (itemId, quantity) => {
 
 let toastTimer;
 
-const showMessage = (message, type) => {
+const showMessage = (message, msgType) => {
     const toast = document.querySelector("#toast")
     const toastMsg = document.querySelector("#toastMessage")
     const toastIcon = document.querySelector(".toast-icon")
@@ -561,10 +581,13 @@ const showMessage = (message, type) => {
     // set message here
     toastMsg.textContent = message
 
-    toast.style.backgroundColor = type === "success" ? "#16a34a" : "#dc2626";
+    toast.style.backgroundColor = msgType === "success" ? "#16a34a" : "#dc2626";
+    if(msgType === "error"){
     toastIcon.style.display = "none"
     toast.style.borderColor = "#dc2626"
     toast.style.color = "#fff"
+    }
+
 
     // some styling in css
     toast.classList.add("show")
