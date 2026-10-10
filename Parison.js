@@ -519,8 +519,7 @@ const createOrder = (itemId, quantity) => {
 
     const newOrder = {
             id: nextOrderId++,
-                items: [{ itemId: item.id, name: item.name, price: item.price, quantity: item.quantity },
-                        { itemId: item.id, name: item.name, price: item.price, quantity: item.quantity }],
+            items: [{itemId: item.id , name: item.name, price : item.price, quantity: quantity}],
                 total: item.price * quantity ,
                 status: "Pending",
                 /// convert current date time to string format
