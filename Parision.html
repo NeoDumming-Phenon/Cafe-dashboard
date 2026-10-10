@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Parision Café</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- This Toast will show success message on top of page if user create menu, order or anything -->
+    <div id="toast" class="toast" role="status" aria-live="polite">
+        <span class="toast-icon">✓</span>
+        <span id="toastMessage">Success!</span>
+    </div>
+    <div class="app">
+ 
+      <input type="radio" name="view" id="v-orders" class="hide" checked />
+      <input type="radio" name="view" id="v-menu" class="hide" />
+      <input type="radio" name="view" id="v-settings" class="hide" />
+
+      <aside class="sidebar">
+        <div class="brand">☕ Parison Café</div>
+        <nav aria-label="Main">
+          <label for="v-orders" class="nav nav-orders">🧾 Orders</label>
+          <label for="v-menu" class="nav nav-menu">🍴 Menu</label>
+          <label for="v-settings" class="nav nav-settings">⚙️ Settings</label>
+        </nav>
+      </aside>
+
+    <div class="content">
+
+        <header class="top">
+          <div>
+            <h1>Parision Café</h1>
+          </div>
+
+          <div class="admin">
+            <span class="admin-icon">👤</span>
+            <div>
+              <strong>Neo & Erick</strong>
+              <span>Administrators</span>
+            </div>
+          </div>
+        </header>
+
+        <main>
+    
+          <section class="view view-orders" aria-label="Orders">
+            <h2>Orders</h2>
+            <div class="stats">
+              <div class="stat">
+                <span>Total orders</span><strong>5</strong>
+              </div>
+              <div class="stat"><span>Pending</span><strong>2</strong></div>
+              <div class="stat"><span>Completed</span><strong>3</strong></div>
+              <a class="btn primary" id = "newOrder" href="#new-order">+ New order</a>
+            </div>
+            <h3>Recent orders</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- 5 deafult order table fields with empty data and later be connected with JS data array-->
+                  <tr>
+                    <td><strong></strong></td>
+                    <td></td>
+                    <td></td>
+                    <td><span class="badge pending"></span></td>
+                    <td></td>
+                    <td><a class="btn small good" href="#"></a></td>
+                  </tr>
+                  <tr>
+                    <td><strong></strong></td>
+                    <td></td>
+                    <td></td>
+                    <td><span class="badge pending"></span></td>
+                    <td></td>
+                    <td><a class="btn small good" href="#"></a></td>
+                  </tr>
+                  <tr>
+                    <td><strong></strong></td>
+                    <td></td>
+                    <td></td>
+                    <td><span class="badge done"></span></td>
+                    <td></td>
+                    <td><a class="btn small" href="#"></a></td>
+                  </tr>
+                  <tr>
+                    <td><strong></strong></td>
+                    <td></td>
+                    <td></td>
+                    <td><span class="badge done"></span></td>
+                    <td></td>
+                    <td><a class="btn small" href="#"></a></td>
+                  </tr>
+                  <tr>
+                    <td><strong></strong></td>
+                    <td></td>
+                    <td></td>
+                    <td><span class="badge done"></span></td>
+                    <td></td>
+                    <td><a class="btn small" href="#"></a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          
+          <section class="view view-menu" aria-label="Menu">
+            <h2>Menu</h2>
+            <input type="radio" name="cat" id="c-all" class="hide" checked />
+            <input type="radio" name="cat" id="c-coffee" class="hide" />
+            <input type="radio" name="cat" id="c-tea" class="hide" />
+            <input type="radio" name="cat" id="c-cake" class="hide" />
+            <input type="radio" name="cat" id="c-food" class="hide" />
+
+            <div class="toolbar">
+              <div class="tabs" role="group" aria-label="Filter by category">
+                <label for="c-all" class="tab t-all">All</label>
+                <label for="c-coffee" class="tab t-coffee">Coffee</label>
+                <label for="c-tea" class="tab t-tea">Tea</label>
+                <label for="c-cake" class="tab t-cake">Cake</label>
+                <label for="c-food" class="tab t-food">Food</label>
+              </div>
+              <a class="btn primary" href="#add-item">+ Add item</a>
+            </div>
+
+            <div class="grid">
+              <article class="card">
+              <div class="pic">
+                  <img src="imgs/latte.jpg" alt="Latte coffee">
+              </div>
+                <h3></h3>
+                <p class="muted"></p>
+                <p class="price"></p>
+                <p class="muted"></p>
+                <div class="row">
+                  <a class="btn small" href="#add-item">Edit</a>
+                  <a class="btn small" href="#delete">Delete</a>
+                </div>
+              </article>
+              <article class="card">
+              <div class="pic">
+                <img src="imgs/americano.jpg" alt="Americano coffee">
+              </div>
+                <h3></h3>
+                <p class="muted"></p>
+                <p class="price"></p>
+                <p class="muted"></p>
+                <div class="row">
+                  <a class="btn small" href="#add-item">Edit</a
+                  ><a class="btn small" href="#delete">Delete</a>
+                </div>
+              </article>
+              <article class="card">
+              <div class="pic">
+                <img src="imgs/tea.jpg" alt="green tea latte">
+              </div>
+                <h3></h3>
+                <p class="muted"></p>
+                <p class="price"></p>
+                <p class="muted"></p>
+                <div class="row">
+                  <a class="btn small" href="#add-item">Edit</a
+                  ><a class="btn small" href="#delete">Delete</a>
+                </div>
+              </article>
+              <article class="card">
+              <div class="pic">
+                <img src="imgs/thaitea.jpg" alt="Thai tea">
+              </div>
+                <h3></h3>
+                <p class="muted"></p>
+                <p class="price"></p>
+                <p class="muted"></p>
+                <div class="row">
+                  <a class="btn small" href="#add-item">Edit</a
+                  ><a class="btn small" href="#delete">Delete</a>
+                </div>
+              </article>
+              <article class="card">
+              <div class="pic">
+                <img src="imgs/cake.jpg" alt="delicious cake">
+              </div>
+                <h3></h3>
+                <p class="muted"></p>
+                <p class="price"></p>
+                <p class="muted"></p>
+                <div class="row">
+                  <a class="btn small" href="#add-item">Edit</a
+                  ><a class="btn small" href="#delete">Delete</a>
+                </div>
+              </article>
+              <article class="card">
+              <div class="pic">
+                <img src="imgs/cake2.jpg" alt="Tasty cake">
+              </div>
+                <h3></h3>
+                <p class="muted"></p>
+                <p class="price"></p>
+                <p class="muted"></p>
+                <div class="row">
+                  <a class="btn small" href="#add-item">Edit</a
+                  ><a class="btn small" href="#delete">Delete</a>
+                </div>
+              </article>
+              <article class="card">
+              <div class="pic">
+                <img src="imgs/food.jpg" alt="Food">
+              </div>
+                <h3></h3>
+                <p class="muted"></p>
+                <p class="price"></p>
+                <p class="muted"></p>
+                <div class="row">
+                  <a class="btn small" href="#add-item">Edit</a
+                  ><a class="btn small" href="#delete">Delete</a>
+                </div>
+              </article>
+              <article class="card">
+              <div class="pic">
+                <img src="imgs/cake3.jpg" alt="Delicious Cake">
+              </div>
+                <h3></h3>
+                <p class="muted"></p>
+                <p class="price"></p>
+                <p class="muted"></p>
+                <div class="row">
+                  <a class="btn small" href="#add-item">Edit</a
+                  ><a class="btn small" href="#delete">Delete</a>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- SETTINGS -->
+      <section class="view view-settings" aria-label="Settings">
+          <h2>Settings</h2>
+
+          <form class="panel settings-form" id="settingsForm">
+              <h3>Café profile</h3>
+              <p>Manage your café's basic information.</p>
+
+              <label for="cafeName">Café name</label>
+              <input
+                  type="text"
+                  id="cafeName"
+                  value="Parision Café"
+                  required
+              />
+
+              <label for="adminName">Admin name</label>
+              <input
+                  type="text"
+                  id="adminName"
+                  value="Admin"
+                  required
+              />
+
+              <button class="btn primary" type="submit">
+                  Save changes
+              </button>
+          </form>
+
+          <div class="panel settings-about">
+              <h3>About</h3>
+              <p>Parision Café Management Dashboard</p>
+              <p>Version 1.0.0</p>
+          </div>
+      </section>
+
+
+        </main>
+
+        <footer>© 2026 Parision Café admin</footer>
+      </div>
+    </div>
+
+    
+    <div class="modal" id="add-item" role="dialog" aria-labelledby="addTitle">
+      <form class="box" action="#menu">
+        <h2 id="addTitle">Add item</h2>
+        <label for="fName">Name</label>
+        <input
+          id="fName"
+          required
+          minlength="2"
+          placeholder="At least 2 characters"
+        />
+        <label for="fPrice">Price</label>
+        <input id="fPrice" type="number" required min="1" step="1" />
+        <label for="fCat">Category</label>
+        <select id="fCat">
+          <option>Coffee</option>
+          <option>Tea</option>
+          <option>Cake</option>
+          <option>Food</option>
+        </select>
+        <label for="fStock">Stock</label>
+        <input id="fStock" type="number" required min="0" step="1" />
+        <div class="row end">
+          <a class="btn" href="#">Cancel</a
+          ><button class="btn primary" type="submit">Save item</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal" id="delete" role="dialog" aria-labelledby="delTitle">
+      <div class="box">
+        <h2 id="delTitle">Delete item?</h2>
+        <p>This removes the item from your menu.</p>
+        <div class="row end">
+          <a class="btn" href="#">Cancel</a
+          ><a class="btn danger" href="#">Delete</a>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal"
+      id="new-order"
+      role="dialog"
+      aria-labelledby="orderTitle"
+    >
+      <form class="box" action="#">
+        <h2 id="orderTitle">New order</h2>
+        <label for="oItem">Item</label>
+        <select id="oItem">
+          <option></option>
+          <option></option>
+          <option></option>
+          <option></option>
+          <option></option>
+          <option></option>
+          <option></option>
+          <option></option>
+        </select>
+        <label for="oQty">Quantity</label>
+        <input id="oQty" type="number" min="1" value="1" required />
+        <div class="row end">
+          <a class="btn" href="#">Cancel</a
+          ><button class="btn primary" type="submit">Create order</button>
+        </div>
+      </form>
+    </div>
+
+    <script src="Parison.js"></script>
+  </body>
+</html>
