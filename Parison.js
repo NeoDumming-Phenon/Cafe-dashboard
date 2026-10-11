@@ -201,7 +201,11 @@ grid.addEventListener("click", (event) => {
 /// when user click edit btn, this action will show live item datas check before actually editing them
 const showItemsToEdit = (id) => {
        
+<<<<<<< HEAD
     /// get current item we want to edit by its id
+=======
+
+>>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
         const item = findItem(id);
 
         if(!item){
@@ -210,7 +214,11 @@ const showItemsToEdit = (id) => {
             return;
         }
 
+<<<<<<< HEAD
         editItemId = id;
+=======
+         editItemId = id;
+>>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
         document.querySelector("#fName").value = item.name;
         document.querySelector("#fPrice").value = item.price;
         document.querySelector("#fCat").value = item.category;
@@ -271,10 +279,13 @@ itemForm.addEventListener("submit", (event) => {
 
     const isSaved = saveItems()
 
+<<<<<<< HEAD
     if(!isSaved){
         return;
     }
 
+=======
+>>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
     resetItemForm();
     location.hash = "v-menu";
 });
@@ -297,7 +308,10 @@ const saveItems = () => {
     else{
         addItem(name,price,category,stock)
     }
+<<<<<<< HEAD
     return true;
+=======
+>>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
 }
 
 const editItem = (name,price,category,stock) => {
@@ -350,7 +364,30 @@ const addItem = (name,price,category,stock) => {
         showSuccessMessage(`${name} is added successfully!`)
 }
 
+<<<<<<< HEAD
 /// manual validation handling
+=======
+const addItemBtn = document.querySelector("#addItemBtn");
+
+addItemBtn.addEventListener("click", () => {
+    resetItemForm();
+});
+
+
+const cancelItemBtn = document.querySelector("#cancelBtn");
+
+cancelItemBtn.addEventListener("click", () => {
+    resetItemForm();
+});
+
+const resetItemForm = () => {
+    editItemId = null;
+
+    itemForm.reset();
+
+    document.querySelector("#addTitle").textContent = "Add item";
+}
+>>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
 
 const validateItems = (name,price,category,stock) => {
 
@@ -585,7 +622,10 @@ const createOrder = (itemId, quantity) => {
         return false;
     }
 
+<<<<<<< HEAD
     // if quantity is less than 1 or input quantity is not integer number
+=======
+>>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
     if(quantity < 1 || !Number.isInteger(quantity)){
         showErrorMessage("Please select a valid menu item.")
         return false;
@@ -624,7 +664,11 @@ const createOrder = (itemId, quantity) => {
 
 
 let toastTimer;
+<<<<<<< HEAD
 /// this method respond to user after user do any action
+=======
+
+>>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
 const showMessage = (message, msgType) => {
     const toast = document.querySelector("#toast")
     const toastMsg = document.querySelector("#toastMessage")
@@ -644,6 +688,10 @@ const showMessage = (message, msgType) => {
     toast.style.color = "#fff"
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
     // some styling in css
     toast.classList.add("show")
 
@@ -656,17 +704,26 @@ const showMessage = (message, msgType) => {
     }, 3000)
 }
 
+<<<<<<< HEAD
 // for success feedback
+=======
+>>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
 const showSuccessMessage = (message) => {
     showMessage(message, "success")
 }
 
+<<<<<<< HEAD
 // for error feedback
+=======
+>>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
 const showErrorMessage = (message) => {
     showMessage(message, "error")
 }
 
+<<<<<<< HEAD
 // simple setting form handling
+=======
+>>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
 const settingForm = document.querySelector(".view .settings-form")
 
 settingForm.addEventListener("submit", (e) => {
