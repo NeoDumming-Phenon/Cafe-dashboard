@@ -1,7 +1,8 @@
+/* Author Neo */
+
 
 /// menuitems with initial datas
 /// treating array like Database
-
 let menuItems = [
   { 
     id: 1,
@@ -9,7 +10,7 @@ let menuItems = [
     category: "Coffee", 
     price: 75, 
     stock: 12, 
-    image : "imgs/latte.jpg"
+    image : "imgs/hotcoffee.jpg"
   },
   {
      id: 2, 
@@ -137,7 +138,7 @@ const findOrder = (id) => {
     return orders.find(order => order.id === Number(id))
 }
 
-// reder menu
+// render menu display menu items with cards
 const renderMenus = (items = menuItems) => {
 
     if(!grid){
@@ -186,7 +187,6 @@ grid.addEventListener("click", (event) => {
 
     /// button.dataset.id return data-id of item id above html
     const id = Number(button.dataset.id);
-
     if (button.classList.contains("edit-item")) {
 
         /// as long as we click edit, the form will show current items
@@ -198,17 +198,19 @@ grid.addEventListener("click", (event) => {
     }
 });
 
-/// when user click edit btn, this action will show live item datas check before editing them
+/// when user click edit btn, this action will show live item datas check before actually editing them
 const showItemsToEdit = (id) => {
-        editItemId = id;
-
+       
+    /// get current item we want to edit by its id
         const item = findItem(id);
 
         if(!item){
             console.warn(`Item with id ${id} is not found!`)
+            showErrorMessage(`Item with id ${id} is not found!`)
             return;
         }
 
+        editItemId = id;
         document.querySelector("#fName").value = item.name;
         document.querySelector("#fPrice").value = item.price;
         document.querySelector("#fCat").value = item.category;
@@ -224,6 +226,7 @@ const handleDeleteItem = (id) => {
 
         if(!item){
             console.warn(`Item with id ${id} is not found!`)
+            showErrorMessage(`Item with id ${id} is not found!`)
             return;
         }
         
@@ -266,10 +269,13 @@ const itemForm = document.querySelector("#add-item form");
 itemForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    saveItems()
+    const isSaved = saveItems()
 
-    itemForm.reset();
-    document.querySelector("#addTitle").textContent = "Add item";
+    if(!isSaved){
+        return;
+    }
+
+    resetItemForm();
     location.hash = "v-menu";
 });
 
@@ -280,13 +286,18 @@ const saveItems = () => {
     const category = document.querySelector("#fCat").value;
     const stock = Number(document.querySelector("#fStock").value);
 
+    if(!validateItems(name,price,category,stock)){
+        return false;
+    }
+
     if(editItemId != null){
         editItem(name,price,category,stock)
+        editItemId = null
     }
     else{
         addItem(name,price,category,stock)
     }
-
+    return true;
 }
 
 const editItem = (name,price,category,stock) => {
@@ -299,7 +310,6 @@ const editItem = (name,price,category,stock) => {
             item.category = category;
             item.stock = stock;
         }
-
         renderMenus()
         renderOrderOptions() /// this method should be called here again because whenever we edit an item in menu, we need to update that item in order option
         showSuccessMessage(`${item.name} is edited successfully!`)
@@ -331,6 +341,7 @@ const addItem = (name,price,category,stock) => {
             stock: stock,
             image: images[category]
         }
+
         menuItems.push(newItem);
         console.log(menuItems); // all menus after adding one
 
@@ -339,8 +350,71 @@ const addItem = (name,price,category,stock) => {
         showSuccessMessage(`${name} is added successfully!`)
 }
 
+/// manual validation handling
 
-/// redern method for all order data
+const validateItems = (name,price,category,stock) => {
+
+    clearFormError() /// this recall is important cuz after form is validated again, we want to clear previous error when we open form again
+    const validCategories = ["Coffee", "Tea", "Cake", "Food"];
+
+    if(name.length < 7){
+        showFormError("Name must be greater than 7")
+        return false;
+    }
+
+    if (!Number.isFinite(price) || price <= 0 || !Number.isInteger(price)) {
+        showFormError("Price must be a positive whole number!");
+        return false;
+    }
+
+    if(!validCategories.includes(category)){
+        showFormError("Please select a valid category!");
+        return;
+    }
+    if (!Number.isInteger(stock) || stock <= 0) {
+        showFormError("Stock must be greater than 0!");
+        return false;
+    }
+
+    return true;
+}
+
+const showFormError = (msg) => {
+    const formError = document.querySelector("#formError")
+    formError.textContent = msg
+    formError.hidden = false;
+}
+
+const clearFormError = () => {
+    const formError = document.querySelector("#formError")
+    formError.textContent = ""
+    formError.hidden = true;
+}
+
+
+const addItemBtn = document.querySelector("#addItemBtn");
+
+addItemBtn.addEventListener("click", () => {
+    resetItemForm();
+});
+
+
+// when clicking cancel btn of item, reset form
+const cancelItemBtn = document.querySelector("#cancelBtn");
+
+cancelItemBtn.addEventListener("click", () => {
+    resetItemForm();
+});
+
+const resetItemForm = () => {
+    editItemId = null;
+
+    itemForm.reset();
+
+    document.querySelector("#addTitle").textContent = "Add item";
+}
+
+/// render method for all order data
 const renderOrders = () => {
 
     const orderTableBody = document.querySelector(".view-orders table tbody")
@@ -350,6 +424,7 @@ const renderOrders = () => {
     }
 
     orderTableBody.innerHTML = orders.map(order => {
+
         const itemNames = order.items.map(item => `${item.name} x ${item.quantity}`).join(",")
 
         const statusClass = order.status === "Pending" ? "pending" : "done"
@@ -384,6 +459,7 @@ const renderOrders = () => {
     }).join("")
 
 
+    /// to monitor number of items, pending, and completed items
    const statas = document.querySelectorAll(".view-orders .stats .stat strong")
 
     if(statas.length >= 3){
@@ -432,7 +508,7 @@ orderTableBody.addEventListener("click", (e) => {
    e.preventDefault()
    const id = Number(button.dataset.id)
 
-   /// if child, button has class, containing complete-order, call completeOrder function
+   /// if child, button has class containing complete-order, call completeOrder function
    if(button.classList.contains("complete-order")){
     completeOrder(id)
    }
@@ -477,7 +553,6 @@ const completeOrder = (id) => {
 
     /// display back all orders 
     renderOrders()
-
 }
 
 const orderForm = document.querySelector("#new-order form")
@@ -502,25 +577,30 @@ orderForm.addEventListener("submit", (e) => {
 const createOrder = (itemId, quantity) => {
 
     const item = findItem(itemId)
+
+    /// validation handlings
+
     if(!item){
-        alert("Please select a valid menu item.");
+        showErrorMessage("Please select a valid menu item.")
         return false;
     }
 
-    if(quantity < 1){
-        alert("Please select a valid menu item.");
+    // if quantity is less than 1 or input quantity is not integer number
+    if(quantity < 1 || !Number.isInteger(quantity)){
+        showErrorMessage("Please select a valid menu item.")
         return false;
     }
 
+    /// if input quantiy is greater than available stock
     if(item.stock < quantity){
-        alert(`Only ${item.stock} units of ${item.name} are available.`);
+        showErrorMessage(`Only ${item.stock} units of ${item.name} are available.`)
         return false;
     }
 
+    item.stock -= quantity; /// this means, after we create new order with available stock, we need to decrease stock amount in menuitems
     const newOrder = {
             id: nextOrderId++,
-                items: [{ itemId: item.id, name: item.name, price: item.price, quantity: item.quantity },
-                        { itemId: item.id, name: item.name, price: item.price, quantity: item.quantity }],
+            items: [{itemId: item.id , name: item.name, price : item.price, quantity: quantity}],
                 total: item.price * quantity ,
                 status: "Pending",
                 /// convert current date time to string format
@@ -544,9 +624,11 @@ const createOrder = (itemId, quantity) => {
 
 
 let toastTimer;
-const showSuccessMessage = (message) => {
+/// this method respond to user after user do any action
+const showMessage = (message, msgType) => {
     const toast = document.querySelector("#toast")
     const toastMsg = document.querySelector("#toastMessage")
+    const toastIcon = document.querySelector(".toast-icon")
 
     if(!toast || !toastMsg){
         return;
@@ -554,6 +636,13 @@ const showSuccessMessage = (message) => {
 
     // set message here
     toastMsg.textContent = message
+
+    toast.style.backgroundColor = msgType === "success" ? "#16a34a" : "#dc2626";
+    if(msgType === "error"){
+    toastIcon.style.display = "none"
+    toast.style.borderColor = "#dc2626"
+    toast.style.color = "#fff"
+    }
 
     // some styling in css
     toast.classList.add("show")
@@ -567,6 +656,17 @@ const showSuccessMessage = (message) => {
     }, 3000)
 }
 
+// for success feedback
+const showSuccessMessage = (message) => {
+    showMessage(message, "success")
+}
+
+// for error feedback
+const showErrorMessage = (message) => {
+    showMessage(message, "error")
+}
+
+// simple setting form handling
 const settingForm = document.querySelector(".view .settings-form")
 
 settingForm.addEventListener("submit", (e) => {

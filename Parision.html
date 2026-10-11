@@ -8,15 +8,16 @@
   </head>
   <body>
     <!-- This Toast will show success message on top of page if user create menu, order or anything -->
-    <div id="toast" class="toast" role="status" aria-live="polite">
+    <section id="toast" class="toast" role="status" aria-live="polite">
         <span class="toast-icon">✓</span>
         <span id="toastMessage">Success!</span>
-    </div>
+    </section>
+
     <div class="app">
- 
-      <input type="radio" name="view" id="v-orders" class="hide" checked />
-      <input type="radio" name="view" id="v-menu" class="hide" />
-      <input type="radio" name="view" id="v-settings" class="hide" />
+
+        <input type="radio" name="view" id="v-orders" class="hide" checked />
+        <input type="radio" name="view" id="v-menu" class="hide" />
+        <input type="radio" name="view" id="v-settings" class="hide" />
 
       <aside class="sidebar">
         <div class="brand">☕ Parison Café</div>
@@ -28,7 +29,6 @@
       </aside>
 
     <div class="content">
-
         <header class="top">
           <div>
             <h1>Parision Café</h1>
@@ -44,7 +44,7 @@
         </header>
 
         <main>
-    
+  
           <section class="view view-orders" aria-label="Orders">
             <h2>Orders</h2>
             <div class="stats">
@@ -115,7 +115,6 @@
             </div>
           </section>
 
-          
           <section class="view view-menu" aria-label="Menu">
             <h2>Menu</h2>
             <input type="radio" name="cat" id="c-all" class="hide" checked />
@@ -132,7 +131,7 @@
                 <label for="c-cake" class="tab t-cake">Cake</label>
                 <label for="c-food" class="tab t-food">Food</label>
               </div>
-              <a class="btn primary" href="#add-item">+ Add item</a>
+              <a class="btn primary" href="#add-item" id = "addItemBtn">+ Add item</a>
             </div>
 
             <div class="grid">
@@ -280,7 +279,7 @@
       </section>
 
 
-        </main>
+      </main>
 
         <footer>© 2026 Parision Café admin</footer>
       </div>
@@ -288,8 +287,11 @@
 
     
     <div class="modal" id="add-item" role="dialog" aria-labelledby="addTitle">
-      <form class="box" action="#menu">
+      <form class="box" action="#menu" novalidate>
         <h2 id="addTitle">Add item</h2>
+
+        <p id="formError" class="form-error" role="alert" hidden></p>
+
         <label for="fName">Name</label>
         <input
           id="fName"
@@ -309,13 +311,14 @@
         <label for="fStock">Stock</label>
         <input id="fStock" type="number" required min="0" step="1" />
         <div class="row end">
-          <a class="btn" href="#">Cancel</a
+          <a class="btn" href="#" id = "cancelBtn">Cancel</a
           ><button class="btn primary" type="submit">Save item</button>
         </div>
       </form>
     </div>
 
-    <div class="modal" id="delete" role="dialog" aria-labelledby="delTitle">
+    <!-- this modal act like <dialog> -->
+    <section class="modal" id="delete" role="dialog" aria-labelledby="delTitle">
       <div class="box">
         <h2 id="delTitle">Delete item?</h2>
         <p>This removes the item from your menu.</p>
@@ -324,7 +327,7 @@
           ><a class="btn danger" href="#">Delete</a>
         </div>
       </div>
-    </div>
+    </section>
 
     <div
       class="modal"
@@ -332,8 +335,10 @@
       role="dialog"
       aria-labelledby="orderTitle"
     >
-      <form class="box" action="#">
+      <form class="box" action="#" novalidate>
         <h2 id="orderTitle">New order</h2>
+        <p id="formError" class="form-error" role="alert" hidden></p>
+
         <label for="oItem">Item</label>
         <select id="oItem">
           <option></option>
