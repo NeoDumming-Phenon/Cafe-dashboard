@@ -135,11 +135,10 @@ footer {
 }
 
 .form-error {
-    margin: 0 0 16px;
-    padding: 10px 12px;
+    margin: 0 0 5px;
+    padding: 5px 5px;
     color: #b91c1c;
-    background: #fef2f2;
-    border: 1px solid #fecaca;
+
     border-radius: 6px;
     font-size: 14px;
 }

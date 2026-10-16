@@ -12,7 +12,6 @@
         <span class="toast-icon">✓</span>
         <span id="toastMessage">Success!</span>
     </section>
-
     <div class="app">
 
         <input type="radio" name="view" id="v-orders" class="hide" checked />
@@ -285,23 +284,27 @@
       </div>
     </div>
 
-    
+
+    <!-- modal dialogs -->
     <div class="modal" id="add-item" role="dialog" aria-labelledby="addTitle">
       <form class="box" action="#menu" novalidate>
         <h2 id="addTitle">Add item</h2>
 
-        <p id="formError" class="form-error" role="alert" hidden></p>
 
         <label for="fName">Name</label>
+        <p id="fName-err" class="form-error" hidden></p>
         <input
           id="fName"
           required
           minlength="2"
           placeholder="At least 2 characters"
         />
+
         <label for="fPrice">Price</label>
+         <p id="fPrice-err" class="form-error" hidden></p>
         <input id="fPrice" type="number" required min="1" step="1" />
         <label for="fCat">Category</label>
+         <p id="fCat-err" class="form-error"  hidden></p>
         <select id="fCat">
           <option>Coffee</option>
           <option>Tea</option>
@@ -309,7 +312,9 @@
           <option>Food</option>
         </select>
         <label for="fStock">Stock</label>
+         <p id="fStock-err" class="form-error" hidden></p>
         <input id="fStock" type="number" required min="0" step="1" />
+
         <div class="row end">
           <a class="btn" href="#" id = "cancelBtn">Cancel</a
           ><button class="btn primary" type="submit">Save item</button>

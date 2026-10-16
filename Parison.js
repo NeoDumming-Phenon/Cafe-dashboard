@@ -122,6 +122,7 @@ let cafeSettings = {
 }
 
 const grid = document.querySelector(".view-menu .grid")
+
 // formats prices to Thai bhat format with two decimal place
 const formatMoney = (amount) => {
     return "฿" + Number(amount).toFixed(2); // meaning two decimal places double values
@@ -130,12 +131,12 @@ const formatMoney = (amount) => {
 
 // find item by its id
 const findItem = (id) => {
-    return menuItems.find(item => item.id === Number(id))
+    return menuItems.find(item => item.id === Number(id));
 }
 
 // find order by its id
 const findOrder = (id) => {
-    return orders.find(order => order.id === Number(id))
+    return orders.find(order => order.id === Number(id));
 }
 
 // render menu display menu items with cards
@@ -143,12 +144,12 @@ const renderMenus = (items = menuItems) => {
 
     if(!grid){
         /// unexpected error here. check HTML selector
-        console.warn("Menu grid not found!")
+        console.warn("Menu grid not found!");
         return;
     }
 
     if(items.length === 0){
-        grid.innerHTML = "<p style='color: red; font-size: 1.5rem;'>No items found!</p>";
+        grid.innerHTML = "<p style='color: red; font-size: 1.5rem;'>No items!</p>";
         return;
     }
 
@@ -174,7 +175,7 @@ const renderMenus = (items = menuItems) => {
 
         `
     }
-    ).join("")
+    ).join("");
 }
 
 grid.addEventListener("click", (event) => {
@@ -190,35 +191,29 @@ grid.addEventListener("click", (event) => {
     if (button.classList.contains("edit-item")) {
 
         /// as long as we click edit, the form will show current items
-        showItemsToEdit(id)
+        showItemsToEdit(id);
     }
 
     if (button.classList.contains("delete-item")) {
-        handleDeleteItem(id)
+        handleDeleteItem(id);
     }
 });
 
 /// when user click edit btn, this action will show live item datas check before actually editing them
 const showItemsToEdit = (id) => {
        
-<<<<<<< HEAD
-    /// get current item we want to edit by its id
-=======
-
->>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
         const item = findItem(id);
 
         if(!item){
-            console.warn(`Item with id ${id} is not found!`)
+            console.error(`Item id id ${id} is not found!`);
             showErrorMessage(`Item with id ${id} is not found!`)
             return;
         }
 
-<<<<<<< HEAD
+        /// update editItemId here is so important cuz we will need it later to update actual item
         editItemId = id;
-=======
-         editItemId = id;
->>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
+
+    /// let user sees current all items in form before editing
         document.querySelector("#fName").value = item.name;
         document.querySelector("#fPrice").value = item.price;
         document.querySelector("#fCat").value = item.category;
@@ -252,6 +247,7 @@ deleteConfirm.addEventListener("click", (event) => {
         return;
     }
 
+    /// get item user want to delete to display item's name in success message 
     const itemToDelete = findItem(deletedItemId)
 
     if(!itemToDelete){
@@ -264,7 +260,7 @@ deleteConfirm.addEventListener("click", (event) => {
     console.log(menuItems);
 
     renderMenus();
-    renderOrderOptions()
+    renderOrderOptions() /// calling this render is essential to keep track of available items in order creation
     showSuccessMessage(`${itemToDelete.name} is deleted successfully!`)
 
     deletedItemId = null;
@@ -277,55 +273,60 @@ const itemForm = document.querySelector("#add-item form");
 itemForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const isSaved = saveItems()
+    const isSaved = saveItems();
 
-<<<<<<< HEAD
     if(!isSaved){
         return;
     }
 
-=======
->>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
     resetItemForm();
     location.hash = "v-menu";
 });
 
 
 const saveItems = () => {
-    const name = document.querySelector("#fName").value.trim();
-    const price = Number(document.querySelector("#fPrice").value);
-    const category = document.querySelector("#fCat").value;
-    const stock = Number(document.querySelector("#fStock").value);
+    const name = document.querySelector("#fName");
+    const price = document.querySelector("#fPrice");
+    const category = document.querySelector("#fCat");
+    const stock = document.querySelector("#fStock");
 
+    /// if items value are not valid, return false
     if(!validateItems(name,price,category,stock)){
         return false;
     }
 
+    const nameValue = name.value.trim();
+    const priceValue = Number(price.value);
+    const catValue = category.value;
+    const stockVal = Number(stock.value)
+
     if(editItemId != null){
-        editItem(name,price,category,stock)
-        editItemId = null
+        editItem(nameValue,priceValue,catValue,stockVal);
     }
     else{
-        addItem(name,price,category,stock)
+        addItem(nameValue,priceValue,catValue,stockVal);
     }
-<<<<<<< HEAD
     return true;
-=======
->>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
 }
 
 const editItem = (name,price,category,stock) => {
-        const item = findItem(editItemId);
+        const item = findItem(editItemId); /// get current item by editItemId
 
-        /// this logic will place existing items we select based on editItemId in form
-        if (item) {
+        if(!item){
+            console.error(`Item not found with id ${editItemId}`);
+            return;
+        }
+
+        // set existing items to new items based
             item.name = name;
             item.price = price;
             item.category = category;
             item.stock = stock;
-        }
-        renderMenus()
-        renderOrderOptions() /// this method should be called here again because whenever we edit an item in menu, we need to update that item in order option
+
+            console.log("edited Item", item);
+            
+        renderMenus();
+        renderOrderOptions(); /// this method should be called here again because whenever we edit an item in menu, we need to update that item in order option
         showSuccessMessage(`${item.name} is edited successfully!`)
 }
 
@@ -356,78 +357,74 @@ const addItem = (name,price,category,stock) => {
             image: images[category]
         }
 
+        console.log("new item ", newItem);
+        
+        
         menuItems.push(newItem);
         console.log(menuItems); // all menus after adding one
 
-        renderMenus()
-        renderOrderOptions() /// this method should be called here again because whenever we add new item in menu, we need to update that item in order option
-        showSuccessMessage(`${name} is added successfully!`)
+        renderMenus();
+        renderOrderOptions();/// this method should be called here again because whenever we add new item in menu, we need to update that item in order option
+        showSuccessMessage(`${name} is added successfully!`);
 }
 
-<<<<<<< HEAD
-/// manual validation handling
-=======
-const addItemBtn = document.querySelector("#addItemBtn");
-
-addItemBtn.addEventListener("click", () => {
-    resetItemForm();
-});
-
-
-const cancelItemBtn = document.querySelector("#cancelBtn");
-
-cancelItemBtn.addEventListener("click", () => {
-    resetItemForm();
-});
-
-const resetItemForm = () => {
-    editItemId = null;
-
-    itemForm.reset();
-
-    document.querySelector("#addTitle").textContent = "Add item";
-}
->>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
-
+/// this method will check details of every form fields before adding or editing item
 const validateItems = (name,price,category,stock) => {
 
-    clearFormError() /// this recall is important cuz after form is validated again, we want to clear previous error when we open form again
     const validCategories = ["Coffee", "Tea", "Cake", "Food"];
 
-    if(name.length < 7){
-        showFormError("Name must be greater than 7")
-        return false;
+    const nameValue = name.value.trim();
+    const priceValue = Number(price.value);
+    const catValue = category.value;
+    const stockVal = Number(stock.value);
+
+    clearFormError(); /// this recall is important cuz after form is validated again, we want to clear previous error when we open form again
+
+    let isValid = true;
+
+    if(nameValue.length < 3){
+        showFormError(name,"Name must contain at least 3 characters!");
+        isValid = false;
     }
 
-    if (!Number.isFinite(price) || price <= 0 || !Number.isInteger(price)) {
-        showFormError("Price must be a positive whole number!");
-        return false;
+    if (!Number.isFinite(priceValue) || priceValue <= 0 || !Number.isInteger(priceValue)) {
+        showFormError(price,"Price must be a positive whole number!");
+        isValid = false;
     }
 
-    if(!validCategories.includes(category)){
-        showFormError("Please select a valid category!");
-        return;
-    }
-    if (!Number.isInteger(stock) || stock <= 0) {
-        showFormError("Stock must be greater than 0!");
-        return false;
+    if(!validCategories.includes(catValue)){
+        showFormError(category,"Please select a valid category!");
+       isValid = false;
     }
 
-    return true;
+    if (!Number.isInteger(stockVal) || stockVal <= 0) {
+        showFormError(stock,"Stock must be greater than 0!");
+        isValid = false;
+    }
+
+    return isValid;
 }
 
-const showFormError = (msg) => {
-    const formError = document.querySelector("#formError")
-    formError.textContent = msg
+const showFormError = (input, msg) => {
+    const formError = document.querySelector(`#${input.id}-err`);
+
+    if (!formError) {
+        console.error(`Missing error element: #${input.id}-err`);
+        return;
+    }
+    formError.textContent = msg;
     formError.hidden = false;
 }
 
 const clearFormError = () => {
-    const formError = document.querySelector("#formError")
-    formError.textContent = ""
-    formError.hidden = true;
-}
+    const formErrors = document.querySelectorAll(".form-error");
 
+    formErrors.forEach((error) => {
+        error.textContent = "";
+        error.hidden = true;
+    })
+
+}
 
 const addItemBtn = document.querySelector("#addItemBtn");
 
@@ -443,6 +440,8 @@ cancelItemBtn.addEventListener("click", () => {
     resetItemForm();
 });
 
+/// adding reset form ensures there is no ambiguous errors in form editing and adding 
+//  while changing actions between add and edit
 const resetItemForm = () => {
     editItemId = null;
 
@@ -462,21 +461,20 @@ const renderOrders = () => {
 
     orderTableBody.innerHTML = orders.map(order => {
 
-        const itemNames = order.items.map(item => `${item.name} x ${item.quantity}`).join(",")
+        const itemNames = order.items.map(item => `${item.name} x ${item.quantity}`).join(",");
 
-        const statusClass = order.status === "Pending" ? "pending" : "done"
+        const statusClass = order.status === "Pending" ? "pending" : "done";
 
         // this ensures pending orders have both Complete and Delete Btn while complete orders have only delete btn
         const action = 
             `${order.status === "Pending" 
                     ?
-                  `<a class="btn small good complete-order" href="#" data-id= ${order.id}>Complete</a>`             
+                  `<a class="btn small good complete-order" href="#" data-id= "${order.id}">Complete</a>`             
                     :
                     `<a class="btn small view" href="#">View</a>`
                    }
                    <a class="btn small danger delete-order"
                      href="#" data-id="${order.id}">Delete</a>
-
             `
                 
     return `
@@ -493,11 +491,11 @@ const renderOrders = () => {
                 <td>${action}</td>
             </tr>
         `
-    }).join("")
+    }).join("");
 
 
     /// to monitor number of items, pending, and completed items
-   const statas = document.querySelectorAll(".view-orders .stats .stat strong")
+   const statas = document.querySelectorAll(".view-orders .stats .stat strong");
 
     if(statas.length >= 3){
         const pendingOrders = orders.filter(order => order.status === "Pending")
@@ -520,34 +518,35 @@ const renderOrderOptions = () => {
 
     ///item.id in option value is important cuz it let us find correct menu item by id 
     select.innerHTML = menuItems.map((item) => {
+        // disable menu option if its stock is zero,
         return `
-        <option value = "${item.id}" ${item.stock === 0 ? "disabled" : ""}>
-            ${item.name} - ${formatMoney(item.price)}
-            (Stock: ${item.stock})
-        </option>
+            <option value = "${item.id}" ${item.stock === 0 ? "disabled" : ""}>
+                    ${item.name} - ${formatMoney(item.price)}
+                    (Stock: ${item.stock})
+            </option>
         `
-    }).join("")
+    }).join("");
 }
 
 
 /// complete order action
 
- const orderTableBody = document.querySelector(".view-orders table tbody")
+ const orderTableBody = document.querySelector(".view-orders table tbody");
 
 orderTableBody.addEventListener("click", (e) => {
    /// select child complete-order button element from table body 
-   const button = e.target.closest("a")
+   const button = e.target.closest("a");
 
    if(!button){
     return;
    }
 
    e.preventDefault()
-   const id = Number(button.dataset.id)
+   const id = Number(button.dataset.id);
 
    /// if child, button has class containing complete-order, call completeOrder function
    if(button.classList.contains("complete-order")){
-    completeOrder(id)
+      completeOrder(id);
    }
    // else call delete 
    if(button.classList.contains("delete-order")){
@@ -570,8 +569,9 @@ const deleteOrder = (orderId) => {
     }
 
     orders = orders.filter(order => order.id !== orderId);
-    renderOrders()
-    showSuccessMessage(`order is deleted successfully!`)
+
+    renderOrders();
+    showSuccessMessage(`order is deleted successfully!`);
 }
 
 // find first by id, and then set status to completed
@@ -579,65 +579,62 @@ const completeOrder = (id) => {
     const order = findOrder(id)
 
     if(!order){
-        console.warn(`Order with ${id} is not found`)
+        console.warn(`Order with ${id} is not found`);
     }
 
+    /// if order status is already "Completed", return back
     if(order.status === "Completed"){
         return;
     }
 
-    order.status = "Completed"
+    order.status = "Completed";
 
     /// display back all orders 
-    renderOrders()
+    renderOrders();
 }
 
-const orderForm = document.querySelector("#new-order form")
+const orderForm = document.querySelector("#new-order form");
 
 /// submit form for creating new order with itemName, quantity
 orderForm.addEventListener("submit", (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     /// itemId inside order form that we get when we select #oItem
-    const itemId = Number(document.querySelector("#oItem").value) 
+    const itemId = Number(document.querySelector("#oItem").value);
 
     const quantity = Number(document.querySelector("#oQty").value);
 
-    let success = createOrder(itemId, quantity)
+    let success = createOrder(itemId, quantity);
 
     if(success){
-        orderForm.reset()
-        location.hash = "v-orders"
+        orderForm.reset();
+        location.hash = "v-orders";
     }
 })
 
 const createOrder = (itemId, quantity) => {
 
-    const item = findItem(itemId)
+    const item = findItem(itemId);
 
     /// validation handlings
-
     if(!item){
-        showErrorMessage("Please select a valid menu item.")
+        showErrorMessage("Please select a valid menu item.");
         return false;
     }
 
-<<<<<<< HEAD
-    // if quantity is less than 1 or input quantity is not integer number
-=======
->>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
     if(quantity < 1 || !Number.isInteger(quantity)){
-        showErrorMessage("Please select a valid menu item.")
+        showErrorMessage("Please select valid menu quantity.");
         return false;
     }
 
     /// if input quantiy is greater than available stock
     if(item.stock < quantity){
-        showErrorMessage(`Only ${item.stock} units of ${item.name} are available.`)
+        showErrorMessage(`Only ${item.stock} units of ${item.name} are available.`);
         return false;
     }
 
     item.stock -= quantity; /// this means, after we create new order with available stock, we need to decrease stock amount in menuitems
+
     const newOrder = {
             id: nextOrderId++,
             items: [{itemId: item.id , name: item.name, price : item.price, quantity: quantity}],
@@ -650,95 +647,84 @@ const createOrder = (itemId, quantity) => {
                 })
     }
 
-    orders.push(newOrder)
+    orders.push(newOrder);
 
     console.log(orders); // debugging all orders
 
     /// display all menus, orders and orderoptions back again
-    renderMenus()
-    renderOrders()
-    renderOrderOptions()
-    showSuccessMessage(`New order is added successfully!`)
+    renderMenus();
+    renderOrders();
+    renderOrderOptions();
+    showSuccessMessage(`New order is added successfully!`);
     return true;
 }
 
 
 let toastTimer;
-<<<<<<< HEAD
-/// this method respond to user after user do any action
-=======
 
->>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
+/// function showMessage is for displaying actionable response from browser after use perform something
 const showMessage = (message, msgType) => {
-    const toast = document.querySelector("#toast")
-    const toastMsg = document.querySelector("#toastMessage")
-    const toastIcon = document.querySelector(".toast-icon")
+    const toast = document.querySelector("#toast");
+    const toastMsg = document.querySelector("#toastMessage");
+    const toastIcon = document.querySelector(".toast-icon");
 
     if(!toast || !toastMsg){
         return;
     }
 
     // set message here
-    toastMsg.textContent = message
+    toastMsg.textContent = message;
 
     toast.style.backgroundColor = msgType === "success" ? "#16a34a" : "#dc2626";
     if(msgType === "error"){
-    toastIcon.style.display = "none"
-    toast.style.borderColor = "#dc2626"
-    toast.style.color = "#fff"
+    toastIcon.style.display = "none";
+    toast.style.borderColor = "#dc2626";
+    toast.style.color = "#fff";
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
     // some styling in css
-    toast.classList.add("show")
+    toast.classList.add("show");
 
     // reset timer of another msg appears
-    clearTimeout(toastTimer)
+    clearTimeout(toastTimer);
 
     // msg dissapear after 3 second
     setTimeout(() => {
-        toast.classList.remove("show")
-    }, 3000)
+        toast.classList.remove("show");
+    }, 3000);
 }
 
-<<<<<<< HEAD
-// for success feedback
-=======
->>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
+//// success message 
 const showSuccessMessage = (message) => {
-    showMessage(message, "success")
+    showMessage(message, "success");
 }
 
-<<<<<<< HEAD
-// for error feedback
-=======
->>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
+/// error message
 const showErrorMessage = (message) => {
-    showMessage(message, "error")
+    showMessage(message, "error");
 }
 
-<<<<<<< HEAD
-// simple setting form handling
-=======
->>>>>>> 2a32e5ea98adf1033a02b9875be32dbf17a1f8d2
-const settingForm = document.querySelector(".view .settings-form")
+const settingForm = document.querySelector(".view .settings-form");
 
 settingForm.addEventListener("submit", (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const cafeName = document.querySelector("#cafeName").value.trim()
-    const adminName = document.querySelector("#adminName").value.trim()
-    const people = document.querySelector(".top .admin strong")
+    const cafeName = document.querySelector("#cafeName").value.trim();
+    const adminName = document.querySelector("#adminName").value.trim();
+    const people = document.querySelector(".top .admin strong");
 
-    people.textContent = adminName
-    cafeSettings.cafeName = cafeName
-    cafeSettings.adminName = adminName
+    people.textContent = adminName;
+    cafeSettings.cafeName = cafeName;
+    cafeSettings.adminName = adminName;
     showSuccessMessage("Settings saved successfully!");
 })
 
-renderMenus()
-renderOrders()
-renderOrderOptions() /// display only available menu items in order options
+
+console.log(menuItems);
+console.log(orders);
+
+renderMenus();
+renderOrders();
+
+
+renderOrderOptions(); /// display only available menu items in order options
